@@ -16,7 +16,8 @@ export class Map extends Component {
       center: {
           lat: this.props.lat,
           lng: this.props.lon
-       }
+       },
+       draggableCursor: 'default'
     });
     var buttonDiv = document.createElement('div');
       var btn = this.addToListButton(buttonDiv);
@@ -56,7 +57,7 @@ export class Map extends Component {
     this.setState({markers: []})
   }
 
-  placeMarkerAndPanTo = (latLng, map) => {
+  placeMarker = (latLng, map) => {
     const marker = new window.google.maps.Marker({
       position: latLng,
     });
@@ -77,7 +78,7 @@ export class Map extends Component {
         })
         let text = `lat: ${place.marker.position.lat().toString()} 
                     lng: ${place.marker.position.lng().toString()}`;
-        place.marker.setLabel({text, fontSize: '18px'})
+        place.marker.setLabel({ text })
       }else{
         place.marker.setLabel(null);
       }
@@ -88,9 +89,7 @@ export class Map extends Component {
   componentDidMount() {
     this.initMap();  
     this.map.addListener('click', (e) => {
-      const lat = e.latLng.lat();
-      const lng = e.latLng.lng();
-      this.placeMarkerAndPanTo(e.latLng, this.map);
+      this.placeMarker(e.latLng, this.map);
     })
   }
 

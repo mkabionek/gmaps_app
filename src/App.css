@@ -19,3 +19,37 @@ html, body {
   flex: 2 0;
   background-color: #ffffff;
 }
+
+ul.places-list {
+  margin: 0;
+  padding: 0;
+}
+
+li.places-item:hover {
+  background-color: #f8f9fa;
+}
+
+li.places-item {
+  cursor: pointer;
+  padding: 8px 10px;
+  text-decoration: none;
+  list-style: none;
+  background-color: #ffffff;
+  width: 100%;
+  border-top: 1px solid #f8f9fa;
+  border-left: 1px solid #f8f9fa;
+  border-right: 1px solid #f8f9fa;
+}
+
+li.places-item:last-of-type {
+  border-bottom: 1px solid #f8f9fa;
+}
+
+li.places-item.active {
+  background-color: #f8f9fa;
+}
+
+
+h4 {
+  padding-left: 10px;
+}

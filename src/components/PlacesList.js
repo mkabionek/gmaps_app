@@ -7,12 +7,17 @@ import { selectPlace } from '../actions/places';
 export class PlacesList extends Component {
 
   render() {
-    let places = this.props.places.map(place => <PlaceItem key={place.id} place={place} onSelect={this.props.selectPlace}/>)
+    let places = this.props.places.map(place => 
+        <PlaceItem key={place.id} place={place} onSelect={this.props.selectPlace} selected={place.selected}/>)
 
     return (
-      <ul>
-        {places}
-      </ul>
+      <div>
+        <h4>Places list:</h4>
+        <ul className="places-list" >
+          {places}
+        </ul>
+      </div>
+      
     )
   }
 }
