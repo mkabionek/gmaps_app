@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import SuggestionItem from './SuggestionItem'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import SuggestionItem from './SuggestionItem';
+import { fetchDetails, selectPlaceId } from '../actions/places';
+import PlaceDetails from './PlaceDetails';
 /* global google */
 
 export class SearchBar extends Component {
@@ -27,12 +29,14 @@ export class SearchBar extends Component {
     if(input.length > 0){
       this.autocomplete.getPlacePredictions({input}, this.displaySuggestions.bind(this));
     }else {
+      this.props.selectPlaceId(null)
       this.setState({suggestions: []})
     }
   }
 
   clickSuggestion(id){
     let selected = this.state.suggestions.find(s => s.id === id)
+    this.props.selectPlaceId(selected.place_id)
     this.setState({suggestions: [], input: selected.description})
   }
 
@@ -63,17 +67,21 @@ export class SearchBar extends Component {
   }
 
   render() {
-    let suggestions = this.state.suggestions.map((s,index) => 
+    const { placeDetails } = this.props;
+    const { selectedIndex, suggestions } = this.state;
+
+    let suggestionList = suggestions.map((s,index) => 
       <SuggestionItem 
         key={s.id}
         id={s.id}
-        selected={this.state.selectedIndex === index ? true : false}
+        selected={selectedIndex === index ? true : false}
         description={s.description}
         clickSuggestion={this.clickSuggestion.bind(this)}
       />
     );
-
     return (
+      
+      
       <div className="search-bar">
         <input
           onKeyDown={this.onArrowPress.bind(this)}
@@ -83,19 +91,21 @@ export class SearchBar extends Component {
           placeholder="Search"
         />
         <ul className="suggestions">
-          {suggestions}
+          {suggestionList}
         </ul>
+        <PlaceDetails place={placeDetails} />
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  
+  placeDetails: state.places.placeDetails
 })
 
 const mapDispatchToProps = {
-  
+  fetchDetails,
+  selectPlaceId
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar)

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { addPlace } from '../actions/places';
+import { fetchDetails } from '../actions/places'
 /* global google */
 
 export class Map extends Component {
@@ -9,6 +10,22 @@ export class Map extends Component {
     super(props);
     this.state = { markers: []}
     this.map = null;
+
+    this.icons = [{
+        url: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-blue.png',
+        size: new google.maps.Size(27, 43),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(13.5, 43),
+        labelOrigin: new google.maps.Point(13.5, 50)
+      },
+      {
+        url: 'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png',
+        size: new google.maps.Size(27, 43),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(13.5, 43),
+        labelOrigin: new google.maps.Point(13.5, 50)
+      }
+    ]
   }
 
   initMap = () => {
@@ -58,16 +75,10 @@ export class Map extends Component {
     this.setState({markers: []})
   }
 
-  placeMarker = (latLng, map) => {
+  placeMarker = (latLng, map, icon) => {
     const marker = new google.maps.Marker({
       position: latLng,
-      icon: {
-          url: 'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-blue.png',
-          size: new google.maps.Size(27, 43),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(13.5, 43),
-          labelOrigin: new google.maps.Point(13.5, 50)
-      }
+      icon
     });
     marker.setMap(map)
     this.setState({markers: [...this.state.markers, marker]})
@@ -75,14 +86,8 @@ export class Map extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     
-    this.props.places.map(place => {
-      place.marker.setIcon({
-        url: 'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png',
-        size: new google.maps.Size(27, 43),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(13.5, 43),
-        labelOrigin: new google.maps.Point(13.5, 50)
-      })
+    this.props.places.items.map(place => {
+      place.marker.setIcon(this.icons[1]);
       if(place.selected){
         let text = `lat: ${place.marker.position.lat().toString()} 
                     lng: ${place.marker.position.lng().toString()}`;
@@ -92,12 +97,24 @@ export class Map extends Component {
       }
       place.marker.setMap(this.map)
     })
+    
+    if(this.props.places.placeId && !this.props.placeDetails){
+      this.placeDetails(this.props.places.placeId)
+    }
+  }
+
+  placeDetails(placeId){
+    var request = {
+      placeId
+    };
+    var service = new google.maps.places.PlacesService(this.map);
+    service.getDetails(request, this.props.fetchDetails);
   }
   
   componentDidMount() {
     this.initMap();  
     this.map.addListener('click', (e) => {
-      this.placeMarker(e.latLng, this.map);
+      this.placeMarker(e.latLng, this.map, this.icons[0]);
     })
   }
 
@@ -107,7 +124,8 @@ export class Map extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  places: state.places
+  places: state.places,
+  placeDetails: state.places.placeDetails
 })
 
-export default connect(mapStateToProps, {addPlace})(Map);
+export default connect(mapStateToProps, {addPlace, fetchDetails})(Map);

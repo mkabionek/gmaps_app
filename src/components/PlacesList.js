@@ -29,7 +29,7 @@ export class PlacesList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  places: state.places
+  places: state.places.items
 })
 
 const mapDispatchToProps = {
