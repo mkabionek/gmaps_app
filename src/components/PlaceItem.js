@@ -1,14 +1,15 @@
 import React from 'react'
 
-const PlaceItem = ({place, onSelect, selected}) => {
-  if(!place) return '';
+const PlaceItem = ({ id, onSelect, selected }) => {
+
+  if(id === undefined || id.length === 0) return '';
 
   const active = selected? ' active' : ''; 
     return <li
       className={`places-item${active}`}
-      onClick={() => {onSelect(place.id)}} 
+      onClick={() => {onSelect(id) }} 
     >
-      {place.id}
+      {id}
     </li>
 }
   

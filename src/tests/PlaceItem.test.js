@@ -4,10 +4,10 @@ import PlaceItem from '../components/PlaceItem';
 
 it(`shows selected place list element`, () => {
   const place = {
-    id: 0
+    id: 1
   }
-  const placeItem = shallow(<PlaceItem place={place} />);
-  expect(placeItem.find('li').text()).toEqual('0')
+  const placeItem = shallow(<PlaceItem id={place.id} />);
+  expect(placeItem.find('li').text()).toEqual('1')
 });
 
 it(`doesn't show selected place list element`, () => {

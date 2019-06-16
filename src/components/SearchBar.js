@@ -80,8 +80,6 @@ export class SearchBar extends Component {
       />
     );
     return (
-      
-      
       <div className="search-bar">
         <input
           onKeyDown={this.onArrowPress.bind(this)}
@@ -93,7 +91,11 @@ export class SearchBar extends Component {
         <ul className="suggestions">
           {suggestionList}
         </ul>
-        <PlaceDetails place={placeDetails} />
+        {placeDetails && <PlaceDetails
+          name={placeDetails.name}
+          lat={placeDetails.geometry.location.lat()}
+          lng={placeDetails.geometry.location.lng()}
+        />}
       </div>
     )
   }

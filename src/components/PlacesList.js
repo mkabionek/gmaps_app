@@ -11,7 +11,7 @@ export class PlacesList extends Component {
     let list = places.map(place => 
       <PlaceItem 
         key={place.id.toString()} 
-        place={place} 
+        id={place.id} 
         onSelect={selectPlace} 
         selected={place.selected}
       />

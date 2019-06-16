@@ -9,6 +9,8 @@ import { selectPlace } from './actions/places';
 export class App extends React.Component {
 
   render(){
+    console.log(this.props.places);
+    
     return (
       <div className="App">
         <Map lat={50.05} lon={19.8}/>

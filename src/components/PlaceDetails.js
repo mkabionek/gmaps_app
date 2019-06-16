@@ -1,13 +1,13 @@
 import React from 'react'
 
-function PlaceDetails({place}) {
+function PlaceDetails({name, lat, lng}) {
 
-  if(!place) return '';
+  if(name === undefined) return '';
 
   return (
     <div className="place-details">
-      <h1>{place.name}</h1>
-      <p>{`${place.geometry.location.lat()}, ${place.geometry.location.lng()}`}</p>
+      <h1>{name}</h1>
+      <p>{lat}, {lng}</p>
     </div>
   )
 }
