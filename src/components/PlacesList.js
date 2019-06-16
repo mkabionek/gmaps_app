@@ -1,39 +1,35 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import PlaceItem from './PlaceItem'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PlaceItem from './PlaceItem';
 import { selectPlace } from '../actions/places';
 
 export class PlacesList extends Component {
 
   render() {
-    let places = this.props.places.map(place => 
-        <PlaceItem 
-          key={place.id} 
-          place={place} 
-          onSelect={this.props.selectPlace} 
-          selected={place.selected}
-        />
-      )
+    const {places, selectPlace} = this.props;
+
+    let list = places.map(place => 
+      <PlaceItem 
+        key={place.id.toString()} 
+        place={place} 
+        onSelect={selectPlace} 
+        selected={place.selected}
+      />
+    );
+    
+    if(list.length === 0){
+      return <p className="info">No places selected</p>
+    }
 
     return (
       <div>
         <h4>Places list:</h4>
         <ul className="places-list" >
-          {places.length > 0 ? places : <p className="info">No places selected</p>}
+          {list}
         </ul>
       </div>
-      
     )
   }
 }
 
-const mapStateToProps = (state) => ({
-  places: state.places.items
-})
-
-const mapDispatchToProps = {
-  selectPlace
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PlacesList)
+export default PlacesList
